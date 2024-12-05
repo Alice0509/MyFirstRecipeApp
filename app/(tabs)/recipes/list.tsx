@@ -1,21 +1,20 @@
-// app/(tabs)/index.tsx
+// app/(tabs)/recipes/list.tsx
 
-import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
-import client from "../../lib/contentful";
-import RecipeCard from "../../components/RecipeCard";
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
+import client from '../../../lib/contentful';
+import RecipeCard from '../../../components/RecipeCard';
 
-const Home = () => {
+const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
 
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
         const response = await client.getEntries({
-          content_type: "recipe",
-          select:
-            "fields.slug,fields.titel,fields.category,fields.image,fields.description",
-          limit: 12,
+          content_type: 'recipe',
+          select: 'fields.slug,fields.titel,fields.category,fields.image,fields.description',
+          limit: 20,
         });
 
         const formattedRecipes = response.items.map((item) => {
@@ -25,15 +24,13 @@ const Home = () => {
             slug: item.fields.slug,
             category: item.fields.category,
             description: item.fields.description,
-            imageUrl: item.fields.image
-              ? `https:${item.fields.image.fields.file.url}`
-              : null,
+            imageUrl: item.fields.image ? `https:${item.fields.image.fields.file.url}` : null,
           };
         });
 
         setRecipes(formattedRecipes);
       } catch (error) {
-        console.error("Error fetching recipes:", error);
+        console.error('Error fetching recipes:', error);
       }
     };
 
@@ -42,7 +39,7 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Home - Recipe List</Text>
+      <Text style={styles.header}>Recipe List</Text>
       <FlatList
         data={recipes}
         keyExtractor={(item) => item.id}
@@ -63,4 +60,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default RecipeList;

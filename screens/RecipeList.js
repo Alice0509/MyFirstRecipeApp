@@ -1,15 +1,12 @@
-// app/(tabs)/index.tsx
-
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
-import client from "../../lib/contentful";
-import RecipeCard from "../../components/RecipeCard";
+import client from "../lib/contentful";
 
-const Home = () => {
-  const [recipes, setRecipes] = useState([]);
+const RecipeList = () => {
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    const fetchRecipes = async () => {
+    const fetchData = async () => {
       try {
         const response = await client.getEntries({
           content_type: "recipe",
@@ -18,7 +15,7 @@ const Home = () => {
           limit: 12,
         });
 
-        const formattedRecipes = response.items.map((item) => {
+        const formattedData = response.items.map((item) => {
           return {
             id: item.sys.id,
             title: item.fields.titel,
@@ -31,36 +28,38 @@ const Home = () => {
           };
         });
 
-        setRecipes(formattedRecipes);
+        setData(formattedData);
       } catch (error) {
-        console.error("Error fetching recipes:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchRecipes();
+    fetchData();
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Home - Recipe List</Text>
-      <FlatList
-        data={recipes}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <RecipeCard recipe={item} />}
-      />
-    </View>
+    <FlatList
+      data={data}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => (
+        <View style={styles.item}>
+          <Text style={styles.title}>{item.title}</Text>
+        </View>
+      )}
+    />
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  item: {
     padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    backgroundColor: "#f9c2ff",
   },
-  header: {
-    fontSize: 24,
-    marginBottom: 20,
+  title: {
+    fontSize: 18,
   },
 });
 
-export default Home;
+export default RecipeList;

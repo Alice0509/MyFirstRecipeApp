@@ -2,6 +2,9 @@
   "expo": {
     "name": "MyFirstRecipeApp",
     "slug": "MyFirstRecipeApp",
+    "extra": {
+      "CONTENTFUL_SPACE_ID": "process.env.CONTENTFUL_SPACE_ID",
+      "CONTENTFUL_ACCESS_TOKEN": "process.env.CONTENTFUL_ACCESS_TOKEN" },
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
